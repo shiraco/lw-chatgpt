@@ -8,6 +8,7 @@ from requests.structures import CaseInsensitiveDict
 from requests.exceptions import RequestException
 
 from fastapi import FastAPI, Request
+from fastapi.staticfiles import StaticFiles
 
 import lineworks as lw
 import chatgpt
@@ -31,6 +32,8 @@ logger.addHandler(handler)
 logger.setLevel(INFO)
 
 app = FastAPI()
+
+app.mount("/woff", StaticFiles(directory="static/woff", html=True), name="woff")
 
 @app.post("/callback")
 async def callback(request: Request):
