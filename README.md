@@ -23,11 +23,23 @@ $ pip install -r requirements.txt
 $ uvicorn main:app --reload
 ```
 
-## dev mode local environment
+## dev mode
+
+Run server
+```sh
+$ pip install -r requirements.txt
+$ uvicorn main:app --reload
+```
 
 If you use ngrok as dev mode,
 ```sh
 $ ngrok http 8000
+```
+
+## prod mode
+
+```
+# uvicorn main:app --port 80 --host 0.0.0.0
 ```
 
 ## Author
