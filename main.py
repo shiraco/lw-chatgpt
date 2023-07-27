@@ -71,6 +71,7 @@ async def callback(request: Request):
                                          SCOPE)
         global_data["access_token"] = res["access_token"]
 
+    # send message
     for i in range(RETRY_COUNT_MAX):
         try:
             # Reply message
@@ -107,5 +108,49 @@ async def callback(request: Request):
             time.sleep(2 ** i)
         else:
             break
+
+    # tmp
+    package_id = 52002735
+    sticker_id = 11537
+
+    # send sticker
+    for i in range(RETRY_COUNT_MAX):
+        try:
+            # Reply message
+            res = lw.send_sticker_to_user(package_id,
+                                          sticker_id,
+                                          bot_id,
+                                          to_user_id,
+                                          global_data["access_token"])
+        except RequestException as e:
+            body = e.response.json()
+            status_code = e.response.status_code
+            if status_code == 403:
+                if body["code"] == "UNAUTHORIZED":
+                    # Access Token has been expired.
+                    # Update Access Token
+                    logger.info("Update access token")
+                    res = lw.get_access_token(client_id,
+                                                     client_secret,
+                                                     service_account_id,
+                                                     privatekey,
+                                                     SCOPE)
+                    global_data["access_token"] = res["access_token"]
+                else:
+                    logger.exception(e)
+                    break
+            elif status_code == 429:
+                # Requests over rate limit.
+                logger.info("Over rate limit")
+                logger.info(body)
+            else:
+                logger.exception(e)
+                break
+
+            # wait and retry
+            time.sleep(2 ** i)
+        else:
+            break
+
 
     return {}
