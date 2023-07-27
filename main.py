@@ -110,8 +110,8 @@ async def callback(request: Request):
             break
 
     # tmp
-    package_id = 52002735
-    sticker_id = 11537
+    package_id = "11537"
+    sticker_id = "52002735"
 
     # send sticker
     for i in range(RETRY_COUNT_MAX):
