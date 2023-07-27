@@ -60,16 +60,6 @@ async def callback(request: Request):
     res_text = chatgpt.generate_response(content["text"])
     to_user_id = from_user_id
 
-    # Create response content
-    res_content = {
-        "content": {
-            "type": "text",
-            "text": res_text,
-        }
-    }
-
-    logger.debug("res_content :{}".format(res_content))
-
     # lineworks reply process
     if "access_token" not in global_data:
         # Get Access Token
@@ -84,10 +74,10 @@ async def callback(request: Request):
     for i in range(RETRY_COUNT_MAX):
         try:
             # Reply message
-            res = lw.send_message_to_user(res_content,
-                                                 bot_id,
-                                                 to_user_id,
-                                                 global_data["access_token"])
+            res = lw.send_message_to_user(res_text,
+                                          bot_id,
+                                          to_user_id,
+                                          global_data["access_token"])
         except RequestException as e:
             body = e.response.json()
             status_code = e.response.status_code

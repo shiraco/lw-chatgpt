@@ -96,10 +96,10 @@ def get_access_token(client_id: str, client_secret: str, service_account: str, p
     return body
 
 
-def send_message_to_user(content: dict, bot_id: str, user_id: str, access_token: str):
+def send_message_to_user(message: str, bot_id: str, user_id: str, access_token: str):
     """Send message to a user
 
-    :param content: Message content
+    :param message: Message text
     :param bot_id: Bot ID
     :param user_id: User ID
     :param access_token: Access Token
@@ -111,7 +111,14 @@ def send_message_to_user(content: dict, bot_id: str, user_id: str, access_token:
           'Authorization' : "Bearer {}".format(access_token),
         }
 
-    params = content
+    # Create response content
+    params = {
+        "content": {
+            "type": "text",
+            "text": message,
+        }
+    }
+
     form_data = json.dumps(params)
 
     r = requests.post(url=url, data=form_data, headers=headers)
