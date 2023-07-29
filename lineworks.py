@@ -125,6 +125,36 @@ def send_message_to_user(message: str, bot_id: str, user_id: str, access_token: 
 
     r.raise_for_status()
 
+def send_message_to_channel(message: str, bot_id: str, channel_id: str, user_id: str, access_token: str):
+    """Send message to a channel
+
+    :param message: Message text
+    :param bot_id: Bot ID
+    :param channel_id: Channel ID
+    :param user_id: User ID
+    :param access_token: Access Token
+    """
+    url = "{}/bots/{}/channels/{}/messages".format(BASE_API_URL, bot_id, channel_id)
+
+    headers = {
+          'Content-Type' : 'application/json',
+          'Authorization' : "Bearer {}".format(access_token),
+        }
+
+    # Create response content
+    params = {
+        "content": {
+            "type": "text",
+            "text": '<m userId="{userId}">, {}'.format(message),
+        }
+    }
+
+    form_data = json.dumps(params)
+
+    r = requests.post(url=url, data=form_data, headers=headers)
+
+    r.raise_for_status()
+
 def send_sticker_to_user(package_id: str, sticker_id: str, bot_id: str, user_id: str, access_token: str):
     """Send sticker to a user
 
@@ -135,6 +165,38 @@ def send_sticker_to_user(package_id: str, sticker_id: str, bot_id: str, user_id:
     :param access_token: Access Token
     """
     url = "{}/bots/{}/users/{}/messages".format(BASE_API_URL, bot_id, user_id)
+
+    headers = {
+          'Content-Type' : 'application/json',
+          'Authorization' : "Bearer {}".format(access_token),
+        }
+
+    # Create response content
+    params = {
+        "content": {
+            "type": "sticker",
+            "packageId": package_id,
+            "stickerId": sticker_id,
+        }
+    }
+
+    form_data = json.dumps(params)
+
+    r = requests.post(url=url, data=form_data, headers=headers)
+
+    r.raise_for_status()
+
+def send_sticker_to_channke(package_id: str, sticker_id: str, bot_id: str, channel_id: str, user_id: str, access_token: str):
+    """Send sticker to a user
+
+    :param package_id: Package ID
+    :param sticker_id: Sticker ID
+    :param bot_id: Bot ID
+    :param channel_id: Channel ID
+    :param user_id: User ID
+    :param access_token: Access Token
+    """
+    url = "{}/bots/{}/channels/{}/messages".format(BASE_API_URL, bot_id, channel_id)
 
     headers = {
           'Content-Type' : 'application/json',

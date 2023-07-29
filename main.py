@@ -55,12 +55,35 @@ async def callback(request: Request):
         return
 
     # Receive message
+    if "channelId" in body_json["source"]:
+        from_channel_id = body_json["source"]["channelId"]
+        to_channel_id = from_channel_id
+        is_talk_room = True
+    else:
+        is_talk_room = False
+
     from_user_id = body_json["source"]["userId"]
+    to_user_id = from_user_id
+
     content = body_json["content"]
+    content_type = body_json["content"]["type"]
 
     # Generate response
-    res_text = chatgpt.generate_response(content["text"])
-    to_user_id = from_user_id
+    if content_type == "text":
+        content_text = content["text"]
+    elif content_type == "location":
+        content_text = content["address"]
+    elif content_type == content_type["sticker"]:
+        content_text = "スタンプ送ります"
+    elif content_type == content_type["image"]:
+        content_text = "画像送ります"
+    elif content_type == content_type["file"]:
+        content_text = "ファイル送ります"
+    else:
+        content_text = "こんにちは"
+
+    # Generate response
+    res_text = chatgpt.generate_response(content_text)
 
     # lineworks reply process
     if "access_token" not in global_data:
@@ -77,10 +100,17 @@ async def callback(request: Request):
     for i in range(RETRY_COUNT_MAX):
         try:
             # Reply message
-            res = lw.send_message_to_user(res_text,
-                                          bot_id,
-                                          to_user_id,
-                                          global_data["access_token"])
+            if is_talk_room:
+                res = lw.send_message_to_channel(res_text,
+                                                 bot_id,
+                                                 to_channel_id,
+                                                 to_user_id,
+                                                 global_data["access_token"])
+            else:
+                res = lw.send_message_to_user(res_text,
+                                              bot_id,
+                                              to_user_id,
+                                              global_data["access_token"])
         except RequestException as e:
             body = e.response.json()
             status_code = e.response.status_code
