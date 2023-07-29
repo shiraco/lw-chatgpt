@@ -1,6 +1,7 @@
 import os
 import time
 import sys
+import random
 
 from logging import getLogger, StreamHandler, INFO
 
@@ -11,6 +12,7 @@ from fastapi import FastAPI, Request
 from fastapi.staticfiles import StaticFiles
 
 import lineworks as lw
+import lineworks_sticker
 import chatgpt
 
 global_data = {}
@@ -109,9 +111,8 @@ async def callback(request: Request):
         else:
             break
 
-    # tmp
-    package_id = "11537"
-    sticker_id = "52002735"
+    # choose sticker
+    sticker_id, package_id = random.choice(lineworks_sticker.stickers)
 
     # send sticker
     for i in range(RETRY_COUNT_MAX):
