@@ -148,11 +148,19 @@ async def callback(request: Request):
     for i in range(RETRY_COUNT_MAX):
         try:
             # Reply message
-            res = lw.send_sticker_to_user(package_id,
-                                          sticker_id,
-                                          bot_id,
-                                          to_user_id,
-                                          global_data["access_token"])
+            if is_talk_room:
+                res = lw.send_sticker_to_channke(package_id,
+                                                 sticker_id,
+                                                 bot_id,
+                                                 to_channel_id,
+                                                 to_user_id,
+                                                 global_data["access_token"])
+            else:
+                res = lw.send_sticker_to_user(package_id,
+                                              sticker_id,
+                                              bot_id,
+                                              to_user_id,
+                                              global_data["access_token"])
         except RequestException as e:
             body = e.response.json()
             status_code = e.response.status_code
