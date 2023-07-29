@@ -73,11 +73,11 @@ async def callback(request: Request):
         content_text = content["text"]
     elif content_type == "location":
         content_text = content["address"]
-    elif content_type == content_type["sticker"]:
+    elif content_type == "sticker":
         content_text = "スタンプ送ります"
-    elif content_type == content_type["image"]:
+    elif content_type == "image":
         content_text = "画像送ります"
-    elif content_type == content_type["file"]:
+    elif content_type == "file":
         content_text = "ファイル送ります"
     else:
         content_text = "こんにちは"
