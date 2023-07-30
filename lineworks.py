@@ -14,6 +14,7 @@ import requests
 BASE_API_URL = "https://www.worksapis.com/v1.0"
 BASE_AUTH_URL = "https://auth.worksmobile.com/oauth2/v2.0"
 
+
 def validate_request(body: bytes, signature: str, bot_secret: str) -> bool:
     """Validate request
 
@@ -46,7 +47,7 @@ def __get_jwt(client_id: str, service_account: str, privatekey: str) -> str:
     iss = client_id
     sub = service_account
     iat = current_time
-    exp = current_time + (60 * 60) # 1 hour
+    exp = current_time + (60 * 60)  # 1 hour
 
     jws = jwt.encode(
         {
@@ -107,9 +108,9 @@ def send_message_to_user(message: str, bot_id: str, user_id: str, access_token: 
     url = "{}/bots/{}/users/{}/messages".format(BASE_API_URL, bot_id, user_id)
 
     headers = {
-          'Content-Type' : 'application/json',
-          'Authorization' : "Bearer {}".format(access_token),
-        }
+        'Content-Type': 'application/json',
+        'Authorization': "Bearer {}".format(access_token),
+    }
 
     # Create response content
     params = {
@@ -125,6 +126,7 @@ def send_message_to_user(message: str, bot_id: str, user_id: str, access_token: 
 
     r.raise_for_status()
 
+
 def send_message_to_channel(message: str, bot_id: str, channel_id: str, user_id: str, access_token: str):
     """Send message to a channel
 
@@ -134,12 +136,13 @@ def send_message_to_channel(message: str, bot_id: str, channel_id: str, user_id:
     :param user_id: User ID
     :param access_token: Access Token
     """
-    url = "{}/bots/{}/channels/{}/messages".format(BASE_API_URL, bot_id, channel_id)
+    url = "{}/bots/{}/channels/{}/messages".format(
+        BASE_API_URL, bot_id, channel_id)
 
     headers = {
-          'Content-Type' : 'application/json',
-          'Authorization' : "Bearer {}".format(access_token),
-        }
+        'Content-Type': 'application/json',
+        'Authorization': "Bearer {}".format(access_token),
+    }
 
     # Create response content
     params = {
@@ -155,6 +158,7 @@ def send_message_to_channel(message: str, bot_id: str, channel_id: str, user_id:
 
     r.raise_for_status()
 
+
 def send_sticker_to_user(package_id: str, sticker_id: str, bot_id: str, user_id: str, access_token: str):
     """Send sticker to a user
 
@@ -167,9 +171,9 @@ def send_sticker_to_user(package_id: str, sticker_id: str, bot_id: str, user_id:
     url = "{}/bots/{}/users/{}/messages".format(BASE_API_URL, bot_id, user_id)
 
     headers = {
-          'Content-Type' : 'application/json',
-          'Authorization' : "Bearer {}".format(access_token),
-        }
+        'Content-Type': 'application/json',
+        'Authorization': "Bearer {}".format(access_token),
+    }
 
     # Create response content
     params = {
@@ -186,6 +190,7 @@ def send_sticker_to_user(package_id: str, sticker_id: str, bot_id: str, user_id:
 
     r.raise_for_status()
 
+
 def send_sticker_to_channke(package_id: str, sticker_id: str, bot_id: str, channel_id: str, user_id: str, access_token: str):
     """Send sticker to a user
 
@@ -196,12 +201,13 @@ def send_sticker_to_channke(package_id: str, sticker_id: str, bot_id: str, chann
     :param user_id: User ID
     :param access_token: Access Token
     """
-    url = "{}/bots/{}/channels/{}/messages".format(BASE_API_URL, bot_id, channel_id)
+    url = "{}/bots/{}/channels/{}/messages".format(
+        BASE_API_URL, bot_id, channel_id)
 
     headers = {
-          'Content-Type' : 'application/json',
-          'Authorization' : "Bearer {}".format(access_token),
-        }
+        'Content-Type': 'application/json',
+        'Authorization': "Bearer {}".format(access_token),
+    }
 
     # Create response content
     params = {

@@ -37,6 +37,7 @@ app = FastAPI()
 
 app.mount("/woff", StaticFiles(directory="static/woff", html=True), name="woff")
 
+
 @app.post("/callback")
 async def callback(request: Request):
     body_raw = await request.body()
@@ -90,10 +91,10 @@ async def callback(request: Request):
         # Get Access Token
         logger.info("Get access token")
         res = lw.get_access_token(client_id,
-                                         client_secret,
-                                         service_account_id,
-                                         privatekey,
-                                         SCOPE)
+                                  client_secret,
+                                  service_account_id,
+                                  privatekey,
+                                  SCOPE)
         global_data["access_token"] = res["access_token"]
 
     # send message
@@ -120,10 +121,10 @@ async def callback(request: Request):
                     # Update Access Token
                     logger.info("Update access token")
                     res = lw.get_access_token(client_id,
-                                                     client_secret,
-                                                     service_account_id,
-                                                     privatekey,
-                                                     SCOPE)
+                                              client_secret,
+                                              service_account_id,
+                                              privatekey,
+                                              SCOPE)
                     global_data["access_token"] = res["access_token"]
                 else:
                     logger.exception(e)
@@ -170,10 +171,10 @@ async def callback(request: Request):
                     # Update Access Token
                     logger.info("Update access token")
                     res = lw.get_access_token(client_id,
-                                                     client_secret,
-                                                     service_account_id,
-                                                     privatekey,
-                                                     SCOPE)
+                                              client_secret,
+                                              service_account_id,
+                                              privatekey,
+                                              SCOPE)
                     global_data["access_token"] = res["access_token"]
                 else:
                     logger.exception(e)
@@ -190,6 +191,5 @@ async def callback(request: Request):
             time.sleep(2 ** i)
         else:
             break
-
 
     return {}

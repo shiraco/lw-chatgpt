@@ -8,6 +8,7 @@ load_dotenv()
 # Settings for OpenAI
 openai.api_key = os.environ["OPENAI_API_KEY"]
 
+
 def generate_response(text: str) -> str:
     """Generate response from ChatGPT
 

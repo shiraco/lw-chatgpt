@@ -1,1 +1,1 @@
-export const woffId = 'xxxxxxxxxxxxxxx'
+export const woffId = "xxxxxxxxxxxxxxx";
