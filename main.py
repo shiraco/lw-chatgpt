@@ -171,42 +171,46 @@ async def callback(request: Request):
                                   SCOPE)
         global_data["access_token"] = res["access_token"]
 
-    # Receive message
-    if "channelId" in body_json["source"]:
-        from_channel_id = body_json["source"]["channelId"]
-        to_channel_id = from_channel_id
-        is_talk_room = True
-    else:
-        is_talk_room = False
+    event_type = body_json["type"]
 
-    from_user_id = body_json["source"]["userId"]
-    to_user_id = from_user_id
+    if event_type == "message":
+        # Receive message
+        if "channelId" in body_json["source"]:
+            from_channel_id = body_json["source"]["channelId"]
+            to_channel_id = from_channel_id
+            is_talk_room = True
+        else:
+            to_channel_id = ""
+            is_talk_room = False
 
-    content = body_json["content"]
-    content_type = body_json["content"]["type"]
+        from_user_id = body_json["source"]["userId"]
+        to_user_id = from_user_id
 
-    # Generate response
-    if content_type == "text":
-        content_text = content["text"]
-    elif content_type == "location":
-        content_text = content["address"]
-    elif content_type == "sticker":
-        content_text = "スタンプ送ります"
-    elif content_type == "image":
-        content_text = "画像送ります"
-    elif content_type == "file":
-        content_text = "ファイル送ります"
-    else:
-        content_text = "こんにちは"
+        content = body_json["content"]
+        content_type = body_json["content"]["type"]
 
-    res_text = chatgpt.generate_response(content_text)
+        # Generate response
+        if content_type == "text":
+            content_text = content["text"]
+        elif content_type == "location":
+            content_text = content["address"]
+        elif content_type == "sticker":
+            content_text = "スタンプ送ります"
+        elif content_type == "image":
+            content_text = "画像送ります"
+        elif content_type == "file":
+            content_text = "ファイル送ります"
+        else:
+            content_text = "こんにちは"
 
-    __send_message(is_talk_room, res_text, to_channel_id, to_user_id)
+        res_text = chatgpt.generate_response(content_text)
 
-    # choose sticker
-    sticker_id, package_id = random.choice(lineworks_sticker.stickers)
+        __send_message(is_talk_room, res_text, to_channel_id, to_user_id)
 
-    __send_sticker(is_talk_room, package_id, sticker_id,
-                   to_channel_id, to_user_id)
+        # choose sticker
+        sticker_id, package_id = random.choice(lineworks_sticker.stickers)
+
+        __send_sticker(is_talk_room, package_id, sticker_id,
+                       to_channel_id, to_user_id)
 
     return {}
