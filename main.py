@@ -160,6 +160,17 @@ async def callback(request: Request):
         logger.warn("Invalid request")
         return
 
+    # lineworks reply process
+    if "access_token" not in global_data:
+        # Get Access Token
+        logger.info("Get access token")
+        res = lw.get_access_token(client_id,
+                                  client_secret,
+                                  service_account_id,
+                                  privatekey,
+                                  SCOPE)
+        global_data["access_token"] = res["access_token"]
+
     # Receive message
     if "channelId" in body_json["source"]:
         from_channel_id = body_json["source"]["channelId"]
@@ -189,17 +200,6 @@ async def callback(request: Request):
         content_text = "こんにちは"
 
     res_text = chatgpt.generate_response(content_text)
-
-    # lineworks reply process
-    if "access_token" not in global_data:
-        # Get Access Token
-        logger.info("Get access token")
-        res = lw.get_access_token(client_id,
-                                  client_secret,
-                                  service_account_id,
-                                  privatekey,
-                                  SCOPE)
-        global_data["access_token"] = res["access_token"]
 
     __send_message(is_talk_room, res_text, to_channel_id, to_user_id)
 
