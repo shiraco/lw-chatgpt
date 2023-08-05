@@ -148,7 +148,7 @@ def send_message_to_channel(message: str, bot_id: str, channel_id: str, user_id:
     params = {
         "content": {
             "type": "text",
-            "text": '<m userId="{}">, {}'.format(user_id, message),
+            "text": '<m userId="{}"> {}'.format(user_id, message),
         }
     }
 
