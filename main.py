@@ -20,8 +20,16 @@ RETRY_COUNT_MAX = 5
 SCOPE = "bot"
 
 # Settings for LINEWORKS
-bot_id = os.environ.get("LW_API_BOT_ID", "dummy")
-bot_secret = os.environ.get("LW_API_BOT_SECRET", "dummy")
+domain_id = os.environ.get("LW_DOMAIN_ID", "dummy")
+deploy_env = os.environ.get("LW_ENV", "dummy")
+
+if deploy_env == "prod":
+    bot_id = os.environ.get("LW_API_BOT_ID_PROD", "dummy")
+    bot_secret = os.environ.get("LW_API_BOT_SECRET_PROD", "dummy")
+elif deploy_env == "dev":
+    bot_id = os.environ.get("LW_API_BOT_ID_DEV", "dummy")
+    bot_secret = os.environ.get("LW_API_BOT_SECRET_DEV", "dummy")
+
 client_id = os.environ.get("LW_API_CLIENT_ID", "dummy")
 client_secret = os.environ.get("LW_API_CLIENT_SECRET", "dummy")
 service_account_id = os.environ.get("LW_API_SERVICE_ACCOUNT", "dummy")
@@ -33,6 +41,7 @@ handler.setLevel(INFO)
 logger.addHandler(handler)
 logger.setLevel(INFO)
 
+# FastAPI
 app = FastAPI()
 
 app.mount("/woff", StaticFiles(directory="static/woff", html=True), name="woff")
