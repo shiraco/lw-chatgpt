@@ -97,6 +97,40 @@ def get_access_token(client_id: str, client_secret: str, service_account: str, p
     return body
 
 
+def register_persistentmenu(bot_id: str, access_token: str):
+    """Register Persistent Menu
+
+    :param bot_id: Bot ID
+    :param access_token: Access Token
+    """
+    url = "{}/bots/{}/persistentmenu".format(BASE_API_URL, bot_id)
+
+    headers = {
+        'Content-Type': 'application/json',
+        'Authorization': "Bearer {}".format(access_token),
+    }
+
+    # Create request content
+    params = {
+        "content": {
+            "actions": [
+                {
+                    "type": "uri",
+                    "label": "woff",
+                    "text": "woff open",
+                    "uri": "https://woff.worksmobile.com/woff/GjyjSbHCoeZe3vBZ8f8iAQ",
+                }
+            ]
+        }
+    }
+
+    form_data = json.dumps(params)
+
+    r = requests.post(url=url, data=form_data, headers=headers)
+
+    r.raise_for_status()
+
+
 def send_message_to_user(message: str, bot_id: str, user_id: str, access_token: str):
     """Send message to a user
 

@@ -213,4 +213,8 @@ async def callback(request: Request):
         __send_sticker(is_talk_room, package_id, sticker_id,
                        to_channel_id, to_user_id)
 
+    elif event_type == "join":
+        lw.register_persistentmenu(bot_id, global_data["access_token"])
+        logger.info("Register persistentmenu")
+
     return {}
