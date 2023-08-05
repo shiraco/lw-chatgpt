@@ -21,7 +21,7 @@ SCOPE = "bot"
 
 # Settings for LINEWORKS
 domain_id = os.environ.get("LW_DOMAIN_ID", "dummy")
-deploy_env = os.environ.get("LW_ENV", "dummy")
+deploy_env = os.environ.get("LW_API_BOT_ENV", "dummy")
 
 if deploy_env == "prod":
     bot_id = os.environ.get("LW_API_BOT_ID_PROD", "dummy")
