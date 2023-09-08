@@ -12,7 +12,7 @@ def create_conversation(db: Session, conversation: schema.ConversationCreatingSc
         content=conversation.content,
         channel_id=conversation.channel_id,
         sender_type=conversation.sender_type,
-        sender_id=conversation.sender_id,
+        user_id=conversation.user_id,
         domain_id=conversation.domain_id,
         bot_id=conversation.bot_id,
         package_id=conversation.package_id,

@@ -228,7 +228,7 @@ async def callback(request: Request, db: Session = Depends(get_db)):
             content=content_text,
             channel_id=from_channel_id,
             sender_type="user",
-            sender_id=from_user_id,
+            user_id=from_user_id,
             bot_id=bot_id,
             domain_id=domain_id,
         )
@@ -241,7 +241,7 @@ async def callback(request: Request, db: Session = Depends(get_db)):
             content=res_text,
             channel_id=from_channel_id,
             sender_type="bot",
-            sender_id=bot_id,
+            user_id=from_user_id,
             bot_id=bot_id,
             domain_id=domain_id,
         )
@@ -257,7 +257,7 @@ async def callback(request: Request, db: Session = Depends(get_db)):
             content="スタンプ送ります",
             channel_id=from_channel_id,
             sender_type="bot",
-            sender_id=bot_id,
+            user_id=from_user_id,
             bot_id=bot_id,
             domain_id=domain_id,
             package_id=package_id,
