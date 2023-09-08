@@ -228,7 +228,7 @@ async def callback(request: Request, db: Session = Depends(get_db)):
             content=content_text,
             channel_id=from_channel_id,
             sender_type="user",
-            user_id=from_user_id,
+            sender_id=from_user_id,
             bot_id=bot_id,
             domain_id=domain_id,
         )
@@ -236,10 +236,34 @@ async def callback(request: Request, db: Session = Depends(get_db)):
 
         res_text = chatgpt.generate_response(content_text)
 
+        conversation = schema.ConversationCreatingSchema(
+            content_type="text",
+            content=res_text,
+            channel_id=from_channel_id,
+            sender_type="bot",
+            sender_id=bot_id,
+            bot_id=bot_id,
+            domain_id=domain_id,
+        )
+        crud.create_conversation(db=db, conversation=conversation)
+
         __send_message(is_talk_room, res_text, to_channel_id, to_user_id)
 
         # choose sticker
         sticker_id, package_id = random.choice(lineworks_sticker.stickers)
+
+        conversation = schema.ConversationCreatingSchema(
+            content_type="sticker",
+            content="スタンプ送ります",
+            channel_id=from_channel_id,
+            sender_type="bot",
+            sender_id=bot_id,
+            bot_id=bot_id,
+            domain_id=domain_id,
+            package_id=package_id,
+            sticker_id=sticker_id,
+        )
+        crud.create_conversation(db=db, conversation=conversation)
 
         __send_sticker(is_talk_room, package_id, sticker_id,
                        to_channel_id, to_user_id)

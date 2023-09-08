@@ -8,9 +8,11 @@ class ConversationSchema(BaseModel):
     content: str = Field(max_length=200)
     channel_id: str = Field(max_length=200, nullable=True, default=None)
     sender_type: str = Field(max_length=200)
-    user_id: str = Field(max_length=200)
+    sender_id: str = Field(max_length=200)
     domain_id: int = Field()
     bot_id: int = Field()
+    package_id: str = Field(max_length=200, nullable=True, default=None)
+    sticker_id: str = Field(max_length=200, nullable=True, default=None)
     created_at: datetime = Field()
 
     class Config:
@@ -22,9 +24,11 @@ class ConversationCreatingSchema(BaseModel):
     content: str = Field(max_length=200)
     channel_id: str = Field(max_length=200, nullable=True, default=None)
     sender_type: str = Field(max_length=200)
-    user_id: str = Field(max_length=200)
+    sender_id: str = Field(max_length=200)
     domain_id: int = Field()
     bot_id: int = Field()
+    package_id: str = Field(max_length=200, nullable=True, default=None)
+    sticker_id: str = Field(max_length=200, nullable=True, default=None)
     created_at: datetime = Field(default=datetime.now())
 
     class Config:

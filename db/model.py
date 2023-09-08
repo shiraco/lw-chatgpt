@@ -12,8 +12,10 @@ class Conversation(Base):
     bot_id: Mapped[int] = mapped_column(Integer, nullable=False)
     channel_id: Mapped[str] = mapped_column(String, nullable=True, default=None)
     sender_type: Mapped[str] = mapped_column(String, nullable=False)
-    user_id: Mapped[str] = mapped_column(String, nullable=False)
+    sender_id: Mapped[str] = mapped_column(String, nullable=False)
     content_type: Mapped[str] = mapped_column(String, nullable=False)
     content: Mapped[str] = mapped_column(String, nullable=False)
+    package_id: Mapped[str] = mapped_column(String, nullable=True, default=None)
+    sticker_id: Mapped[str] = mapped_column(String, nullable=True, default=None)
     created_at: Mapped[datetime] = mapped_column(
         DateTime, default=datetime.now(), nullable=False)
