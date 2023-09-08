@@ -162,3 +162,6 @@ cython_debug/
 
 *.code-workspace
 params.js
+
+# db sqlite3
+*.db
