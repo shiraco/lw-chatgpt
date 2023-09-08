@@ -234,7 +234,38 @@ async def callback(request: Request, db: Session = Depends(get_db)):
         )
         crud.create_conversation(db=db, conversation=conversation)
 
-        res_text = chatgpt.generate_response(content_text)
+        # res_text = chatgpt.generate_response(content_text)
+        if is_talk_room:
+            conversations = crud.get_conversations_for_chatgpt_filter_by_channel_id(
+                from_channel_id, db)
+        else:
+            conversations = crud.get_conversations_for_chatgpt_filter_by_user_id(
+                from_user_id, db)
+
+        # past_messages = [
+        #     {"role": "assistant", "content": "あなたの名前を教えてください。"},
+        #     {"role": "user", "content":  "私の名前は太郎です。"},
+        #     {"role": "assistant", "content": "太郎さんこんにちは"},
+        #     {"role": "user", "content": "ところで私の名前はわかりますか？"},
+        # ]
+
+        past_messages = []
+
+        for conversation in conversations:
+            logger.debug(conversation)
+
+            if conversation.sender_type == "user":
+                past_messages.append(
+                    {"role": "user", "content": conversation.content})
+            elif conversation.sender_type == "bot":
+                past_messages.append(
+                    {"role": "assistant", "content": conversation.content})
+                
+        past_messages = list(reversed(past_messages))
+
+        logger.debug(past_messages)
+
+        res_text = chatgpt.generate_response(*past_messages)
 
         conversation = schema.ConversationCreatingSchema(
             content_type="text",

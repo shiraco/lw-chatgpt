@@ -26,3 +26,17 @@ def generate_response(text: str) -> str:
     res = response.choices[0]["message"]["content"].strip()
 
     return res
+
+def generate_response(*contents) -> str:
+    """Generate response from ChatGPT
+
+    :param text: request text
+    :return: generated text
+    """
+    response = openai.ChatCompletion.create(
+        model="gpt-3.5-turbo",
+        messages=contents,
+    )
+    res = response.choices[0]["message"]["content"].strip()
+
+    return res
