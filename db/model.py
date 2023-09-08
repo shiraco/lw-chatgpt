@@ -3,13 +3,6 @@ from database import Base
 from sqlalchemy.orm import Mapped, mapped_column
 
 
-class Memo(Base):
-    __tablename__ = 'memos'
-
-    memo_id = Column(Integer, primary_key=True, index=True, autoincrement=True)
-    content = Column(String, index=True)
-
-
 class Conversation(Base):
     __tablename__ = 'conversasions'
 
