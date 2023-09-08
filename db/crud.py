@@ -1,5 +1,5 @@
 from sqlalchemy.orm import Session
-import model, schema
+from db import model, schema
 
 
 def get_conversations(db: Session, skip: int = 0, limit: int = 100):

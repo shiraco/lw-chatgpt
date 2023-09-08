@@ -4,16 +4,23 @@ import sys
 import random
 
 from logging import getLogger, StreamHandler, INFO
+from typing import List
 
 from requests.structures import CaseInsensitiveDict
 from requests.exceptions import RequestException
 
-from fastapi import FastAPI, Request
+from fastapi import FastAPI, Request, Depends
 from fastapi.staticfiles import StaticFiles
+
+from sqlalchemy.orm import Session
+
+from db.database import SessionLocal, engine
+from db import model, schema, crud
 
 import lineworks as lw
 import lineworks_sticker
 import chatgpt
+
 
 global_data = {}
 RETRY_COUNT_MAX = 5
@@ -41,10 +48,22 @@ handler.setLevel(INFO)
 logger.addHandler(handler)
 logger.setLevel(INFO)
 
+
+model.Base.metadata.create_all(bind=engine)
+
+
 # FastAPI
 app = FastAPI()
 
 app.mount("/woff", StaticFiles(directory="static/woff", html=True), name="woff")
+
+
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
 
 
 def __send_message(is_talk_room: bool, res_text: str, to_channel_id: str, to_user_id: str):
@@ -218,3 +237,14 @@ async def callback(request: Request):
         logger.info("Register persistentmenu")
 
     return {}
+
+
+@app.get("/conversations", response_model=List[schema.ConversationSchema])
+async def read_conversations(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
+    conversations = crud.get_conversations(db, skip=skip, limit=limit)
+    return conversations
+
+
+@app.post("/conversations", response_model=schema.ConversationSchema)
+async def create_conversations(conversation: schema.ConversationCreatingSchema, db: Session = Depends(get_db)):
+    return crud.create_conversation(db=db, conversation=conversation)
