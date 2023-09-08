@@ -163,7 +163,7 @@ def __send_sticker(is_talk_room: bool, package_id: str, sticker_id: str, to_chan
 
 
 @app.post("/callback")
-async def callback(request: Request):
+async def callback(request: Request, db: Session = Depends(get_db)):
     body_raw = await request.body()
     body_json = await request.json()
     headers = CaseInsensitiveDict(request.headers)
@@ -199,7 +199,8 @@ async def callback(request: Request):
             to_channel_id = from_channel_id
             is_talk_room = True
         else:
-            to_channel_id = ""
+            from_channel_id = None
+            to_channel_id = None
             is_talk_room = False
 
         from_user_id = body_json["source"]["userId"]
@@ -221,6 +222,17 @@ async def callback(request: Request):
             content_text = "ファイル送ります"
         else:
             content_text = "こんにちは"
+
+        conversation = schema.ConversationCreatingSchema(
+            content_type=content_type,
+            content=content_text,
+            channel_id=from_channel_id,
+            sender_type="user",
+            user_id=from_user_id,
+            bot_id=bot_id,
+            domain_id=domain_id,
+        )
+        crud.create_conversation(db=db, conversation=conversation)
 
         res_text = chatgpt.generate_response(content_text)
 
